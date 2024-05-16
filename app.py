@@ -4,6 +4,7 @@ from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 from nltk import pos_tag, ne_chunk
 from collections import defaultdict
+from nltk.sentiment.vader import SentimentIntensityAnalyzer
 
 app = Flask(__name__)
 
@@ -13,6 +14,7 @@ nltk.download('stopwords')
 nltk.download('averaged_perceptron_tagger')
 nltk.download('maxent_ne_chunker')
 nltk.download('words')
+nltk.download('vader_lexicon')
 
 @app.route('/')
 def home():
@@ -48,14 +50,20 @@ def process():
             label = subtree.label()
             ner_result[label].append(entity)
 
+    # Sentiment Analysis
+    analyzer = SentimentIntensityAnalyzer()
+    sentiment_scores = analyzer.polarity_scores(input_text)
+
     if option == 'Tokenize':
         return render_template('index.html', tokenized_text=tokenized_text)
     elif option == 'PosTag':
         return render_template('index.html', pos_tagged_text=pos_tagged_text)
     elif option == 'NER':
         return render_template('index.html', ner_result=ner_result)
+    elif option == 'Sentiment':
+        return render_template('index.html', sentiment_scores=sentiment_scores)
     elif option == 'All':
-        return render_template('index.html', tokenized_text=tokenized_text, pos_tagged_text=pos_tagged_text, ner_result=ner_result)
+        return render_template('index.html', tokenized_text=tokenized_text, pos_tagged_text=pos_tagged_text, ner_result=ner_result, sentiment_scores=sentiment_scores)
     else:
         return render_template('index.html')  # Default render without results
 
