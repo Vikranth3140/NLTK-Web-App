@@ -10,13 +10,14 @@
     <div class="container">
         <h1 class="mt-4">NLTK Web App</h1>
         
-        <!-- Tokenization Form -->
-        <form method="post" action="/tokenize">
+        <!-- Tokenization and POS Tagging Form -->
+        <form method="post" action="/process">
             <div class="form-group">
                 <label for="textInput">Enter Text:</label>
                 <textarea class="form-control" id="textInput" name="inputText" rows="4"></textarea>
             </div>
-            <button type="submit" class="btn btn-primary">Tokenize</button>
+            <button type="submit" class="btn btn-primary" name="tokenize">Tokenize</button>
+            <button type="submit" class="btn btn-primary" name="pos_tag">POS Tagging</button>
         </form>
         
         <!-- Tokenized Text Display -->
@@ -26,24 +27,18 @@
                 <p>{{ tokenized_text }}</p>
             {% endif %}
         </div>
-
-        <!-- POS Tagging Form -->
-        <form method="post" action="/pos_tag">
-            <div class="form-group">
-                <label for="posInput">Enter Sentence:</label>
-                <input type="text" class="form-control" id="posInput" name="inputSentence">
-            </div>
-            <button type="submit" class="btn btn-primary">POS Tagging</button>
-        </form>
-
-        <!-- POS Tagged Sentence Display -->
-        <div id="posTaggedSentence" class="mt-4">
+        
+        <!-- POS Tagged Text Display -->
+        <div id="posTaggedText" class="mt-4">
             {% if pos_tagged_sentence %}
                 <h3>POS Tagged Sentence:</h3>
-                <p>{{ pos_tagged_sentence }}</p>
+                <p>
+                    {% for word, pos_tag in pos_tagged_sentence %}
+                        {{ word }} ({{ pos_tag }}) &nbsp;
+                    {% endfor %}
+                </p>
             {% endif %}
         </div>
-
     </div>
 
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
