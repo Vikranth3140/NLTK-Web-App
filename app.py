@@ -3,8 +3,8 @@ import nltk
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 from nltk import pos_tag, ne_chunk
-from collections import defaultdict
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
+from collections import defaultdict
 
 app = Flask(__name__)
 

@@ -67,6 +67,15 @@
                 <p>Compound: {{ sentiment_scores.compound }}</p>
             {% endif %}
         </div>
+
+        <!-- Error Message Display -->
+        <div id="errorMessage" class="mt-4">
+            {% if error_message %}
+                <div class="alert alert-danger" role="alert">
+                    {{ error_message }}
+                </div>
+            {% endif %}
+        </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
