@@ -10,3 +10,17 @@
 - **Concordance**: Finding occurrences of a word in context with its surrounding words.
 - **WordNet Integration**: Accessing lexical database for English language words.
 - **Chunking**: Grouping words into meaningful chunks or phrases.
+
+
+
+**Tokenization**
+
+**Input Text:** "NLTK is a powerful library for natural language processing."
+
+**Tokenized Text (Without Stopwords):**
+- "NLTK"
+- "powerful"
+- "library"
+- "natural"
+- "language"
+- "processing"
