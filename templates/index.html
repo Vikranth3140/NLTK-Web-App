@@ -26,6 +26,24 @@
                 <p>{{ tokenized_text }}</p>
             {% endif %}
         </div>
+
+        <!-- POS Tagging Form -->
+        <form method="post" action="/pos_tag">
+            <div class="form-group">
+                <label for="posInput">Enter Sentence:</label>
+                <input type="text" class="form-control" id="posInput" name="inputSentence">
+            </div>
+            <button type="submit" class="btn btn-primary">POS Tagging</button>
+        </form>
+
+        <!-- POS Tagged Sentence Display -->
+        <div id="posTaggedSentence" class="mt-4">
+            {% if pos_tagged_sentence %}
+                <h3>POS Tagged Sentence:</h3>
+                <p>{{ pos_tagged_sentence }}</p>
+            {% endif %}
+        </div>
+
     </div>
 
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
