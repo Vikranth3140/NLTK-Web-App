@@ -21,6 +21,7 @@
                 <select class="form-control" id="optionSelect" name="option">
                     <option value="Tokenize">Tokenize</option>
                     <option value="PosTag">POS Tagging</option>
+                    <option value="NER">NER</option>
                     <option value="All">All</option>
                 </select>
             </div>
@@ -40,6 +41,18 @@
             {% if pos_tagged_text %}
                 <h3>POS Tagged Text:</h3>
                 <p>{{ pos_tagged_text }}</p>
+            {% endif %}
+        </div>
+
+        <!-- Named Entity Recognition (NER) Display -->
+        <div id="nerResult" class="mt-4">
+            {% if ner_result %}
+                <h3>Named Entities:</h3>
+                <ul>
+                    {% for label, entities in ner_result.items() %}
+                        <li>{{ label }}: {{ ', '.join(entities) }}</li>
+                    {% endfor %}
+                </ul>
             {% endif %}
         </div>
     </div>
