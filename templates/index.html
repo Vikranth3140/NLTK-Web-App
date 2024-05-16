@@ -10,14 +10,13 @@
     <div class="container">
         <h1 class="mt-4">NLTK Web App</h1>
         
-        <!-- Tokenization and POS Tagging Form -->
+        <!-- Text Input and Form Submission -->
         <form method="post" action="/process">
             <div class="form-group">
                 <label for="textInput">Enter Text:</label>
                 <textarea class="form-control" id="textInput" name="inputText" rows="4"></textarea>
             </div>
-            <button type="submit" class="btn btn-primary" name="tokenize">Tokenize</button>
-            <button type="submit" class="btn btn-primary" name="pos_tag">POS Tagging</button>
+            <button type="submit" class="btn btn-primary">Submit</button>
         </form>
         
         <!-- Tokenized Text Display -->
@@ -30,13 +29,9 @@
         
         <!-- POS Tagged Text Display -->
         <div id="posTaggedText" class="mt-4">
-            {% if pos_tagged_sentence %}
-                <h3>POS Tagged Sentence:</h3>
-                <p>
-                    {% for word, pos_tag in pos_tagged_sentence %}
-                        {{ word }} ({{ pos_tag }}) &nbsp;
-                    {% endfor %}
-                </p>
+            {% if pos_tagged_text %}
+                <h3>POS Tagged Text:</h3>
+                <p>{{ pos_tagged_text }}</p>
             {% endif %}
         </div>
     </div>
