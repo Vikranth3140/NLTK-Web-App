@@ -4,7 +4,7 @@ from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 from nltk import pos_tag, ne_chunk
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
-from collections import defaultdict
+from collections import defaultdict, Counter
 
 app = Flask(__name__)
 
@@ -54,6 +54,9 @@ def process():
     analyzer = SentimentIntensityAnalyzer()
     sentiment_scores = analyzer.polarity_scores(input_text)
 
+    # Word Frequency Analysis
+    word_freq = Counter(filtered_tokens)
+
     if option == 'Tokenize':
         return render_template('index.html', tokenized_text=tokenized_text)
     elif option == 'PosTag':
@@ -62,8 +65,10 @@ def process():
         return render_template('index.html', ner_result=ner_result)
     elif option == 'Sentiment':
         return render_template('index.html', sentiment_scores=sentiment_scores)
+    elif option == 'WordFreq':
+        return render_template('index.html', word_freq=word_freq.most_common())
     elif option == 'All':
-        return render_template('index.html', tokenized_text=tokenized_text, pos_tagged_text=pos_tagged_text, ner_result=ner_result, sentiment_scores=sentiment_scores)
+        return render_template('index.html', tokenized_text=tokenized_text, pos_tagged_text=pos_tagged_text, ner_result=ner_result, sentiment_scores=sentiment_scores, word_freq=word_freq.most_common())
     else:
         return render_template('index.html')  # Default render without results
 

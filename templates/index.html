@@ -23,6 +23,7 @@
                     <option value="PosTag">POS Tagging</option>
                     <option value="NER">NER</option>
                     <option value="Sentiment">Sentiment Analysis</option>
+                    <option value="WordFreq">Word Frequency Analysis</option>
                     <option value="All">All</option>
                 </select>
             </div>
@@ -45,7 +46,7 @@
             {% endif %}
         </div>
         
-        <!-- Named Entity Recognition (NER) Display -->
+        <!-- NER Result Display -->
         <div id="nerResult" class="mt-4">
             {% if ner_result %}
                 <h3>Named Entities:</h3>
@@ -65,6 +66,18 @@
                 <p>Negative: {{ sentiment_scores.neg }}</p>
                 <p>Neutral: {{ sentiment_scores.neu }}</p>
                 <p>Compound: {{ sentiment_scores.compound }}</p>
+            {% endif %}
+        </div>
+
+        <!-- Word Frequency Analysis Result Display -->
+        <div id="wordFreqResult" class="mt-4">
+            {% if word_freq %}
+                <h3>Word Frequency Analysis:</h3>
+                <ul>
+                    {% for word, freq in word_freq %}
+                        <li>{{ word }}: {{ freq }}</li>
+                    {% endfor %}
+                </ul>
             {% endif %}
         </div>
 
