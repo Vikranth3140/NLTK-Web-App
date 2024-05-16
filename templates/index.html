@@ -25,12 +25,13 @@
                     <option value="Sentiment">Sentiment Analysis</option>
                     <option value="WordFreq">Word Frequency Analysis</option>
                     <option value="Concordance">Concordance</option>
+                    <option value="WordNet">WordNet Integration</option>
                     <option value="All">All</option>
                 </select>
             </div>
-            <!-- Additional input for Concordance -->
+            <!-- Additional input for Concordance and WordNet -->
             <div class="form-group" id="keywordInput" style="display:none;">
-                <label for="keyword">Keyword for Concordance:</label>
+                <label for="keyword">Keyword for Concordance / WordNet:</label>
                 <input type="text" class="form-control" id="keyword" name="keyword">
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
@@ -99,6 +100,25 @@
             {% endif %}
         </div>
 
+        <!-- WordNet Integration Result Display -->
+        <div id="wordnetResult" class="mt-4">
+            {% if wordnet_info %}
+                <h3>WordNet Information for '{{ keyword }}':</h3>
+                {% for synset in wordnet_info %}
+                    <div class="card mt-2">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ synset.name }}</h5>
+                            <p class="card-text"><strong>Definition:</strong> {{ synset.definition }}</p>
+                            {% if synset.examples %}
+                                <p class="card-text"><strong>Examples:</strong> {{ synset.examples }}</p>
+                            {% endif %}
+                            <!-- Include other information like hypernyms, hyponyms, etc. as needed -->
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+
         <!-- Error Message Display -->
         <div id="errorMessage" class="mt-4">
             {% if error_message %}
@@ -113,10 +133,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <script>
-        // Show/hide keyword input for Concordance based on option selection
+        // Show/hide keyword input for Concordance and WordNet based on option selection
         $('#optionSelect').change(function() {
             var option = $(this).val();
-            if (option == 'Concordance') {
+            if (option == 'Concordance' || option == 'WordNet') {
                 $('#keywordInput').show();
             } else {
                 $('#keywordInput').hide();

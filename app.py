@@ -5,6 +5,7 @@ from nltk.corpus import stopwords
 from nltk import pos_tag, ne_chunk
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 from collections import defaultdict, Counter
+from nltk.corpus import wordnet as wn
 
 app = Flask(__name__)
 
@@ -15,6 +16,7 @@ nltk.download('averaged_perceptron_tagger')
 nltk.download('maxent_ne_chunker')
 nltk.download('words')
 nltk.download('vader_lexicon')
+nltk.download('wordnet')
 
 def generate_concordance(tokens, keyword, window_size=3):
     concordance_list = []
@@ -25,6 +27,21 @@ def generate_concordance(tokens, keyword, window_size=3):
             context = ' '.join(tokens[start_index:end_index])
             concordance_list.append(context)
     return concordance_list
+
+def get_wordnet_info(keyword):
+    synsets = wn.synsets(keyword)
+    synset_info = []
+    for synset in synsets:
+        synset_info.append({
+            'name': synset.name(),
+            'definition': synset.definition(),
+            'examples': synset.examples(),
+            'hypernyms': synset.hypernyms(),
+            'hyponyms': synset.hyponyms(),
+            'holonyms': synset.member_holonyms(),
+            'meronyms': synset.part_meronyms(),
+        })
+    return synset_info
 
 @app.route('/')
 def home():
@@ -71,6 +88,9 @@ def process():
     # Concordance
     concordance_list = generate_concordance(filtered_tokens, keyword)
 
+    # WordNet Integration
+    wordnet_info = get_wordnet_info(keyword)
+
     if option == 'Tokenize':
         return render_template('index.html', tokenized_text=tokenized_text)
     elif option == 'PosTag':
@@ -83,10 +103,13 @@ def process():
         return render_template('index.html', word_freq=word_freq.most_common())
     elif option == 'Concordance':
         return render_template('index.html', concordance_list=concordance_list, keyword=keyword)
+    elif option == 'WordNet':
+        return render_template('index.html', wordnet_info=wordnet_info, keyword=keyword)
     elif option == 'All':
         return render_template('index.html', tokenized_text=tokenized_text, pos_tagged_text=pos_tagged_text,
                                ner_result=ner_result, sentiment_scores=sentiment_scores,
-                               word_freq=word_freq.most_common(), concordance_list=concordance_list, keyword=keyword)
+                               word_freq=word_freq.most_common(), concordance_list=concordance_list,
+                               keyword=keyword, wordnet_info=wordnet_info)
     else:
         return render_template('index.html')  # Default render without results
 
