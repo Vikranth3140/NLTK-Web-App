@@ -4,6 +4,7 @@ from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 from nltk import pos_tag, ne_chunk
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
+from nltk.text import Text  # Added import for Text class
 from collections import defaultdict, Counter
 
 app = Flask(__name__)
@@ -71,6 +72,24 @@ def process():
         return render_template('index.html', tokenized_text=tokenized_text, pos_tagged_text=pos_tagged_text, ner_result=ner_result, sentiment_scores=sentiment_scores, word_freq=word_freq.most_common())
     else:
         return render_template('index.html')  # Default render without results
+
+@app.route('/concordance', methods=['POST'])
+def concordance():
+    input_text = request.form['inputText']
+    word = request.form['word']
+
+    # Tokenization and stopwords removal
+    tokens = word_tokenize(input_text)
+    stop_words = set(stopwords.words('english'))
+    filtered_tokens = [word for word in tokens if word.lower() not in stop_words]
+
+    # Create an NLTK Text object
+    text = Text(filtered_tokens)
+
+    # Get concordance
+    conc = text.concordance(word)
+
+    return render_template('index.html', input_text=input_text, word=word, concordance=conc)
 
 if __name__ == '__main__':
     app.run(debug=True)

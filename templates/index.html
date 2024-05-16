@@ -24,6 +24,7 @@
                     <option value="NER">NER</option>
                     <option value="Sentiment">Sentiment Analysis</option>
                     <option value="WordFreq">Word Frequency Analysis</option>
+                    <option value="Concordance">Concordance</option>
                     <option value="All">All</option>
                 </select>
             </div>
@@ -68,7 +69,7 @@
                 <p>Compound: {{ sentiment_scores.compound }}</p>
             {% endif %}
         </div>
-
+        
         <!-- Word Frequency Analysis Result Display -->
         <div id="wordFreqResult" class="mt-4">
             {% if word_freq %}
@@ -78,6 +79,14 @@
                         <li>{{ word }}: {{ freq }}</li>
                     {% endfor %}
                 </ul>
+            {% endif %}
+        </div>
+
+        <!-- Concordance Result Display -->
+        <div id="concordanceResult" class="mt-4">
+            {% if concordance %}
+                <h3>Concordance for '{{ word }}':</h3>
+                <p>{{ concordance }}</p>
             {% endif %}
         </div>
 
