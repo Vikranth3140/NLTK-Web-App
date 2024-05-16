@@ -4,7 +4,6 @@ from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 from nltk import pos_tag, ne_chunk
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
-from nltk.text import Text  # Added import for Text class
 from collections import defaultdict, Counter
 
 app = Flask(__name__)
@@ -17,6 +16,16 @@ nltk.download('maxent_ne_chunker')
 nltk.download('words')
 nltk.download('vader_lexicon')
 
+def generate_concordance(tokens, keyword, window_size=3):
+    concordance_list = []
+    for i, token in enumerate(tokens):
+        if token.lower() == keyword.lower():
+            start_index = max(0, i - window_size)
+            end_index = min(len(tokens), i + window_size + 1)
+            context = ' '.join(tokens[start_index:end_index])
+            concordance_list.append(context)
+    return concordance_list
+
 @app.route('/')
 def home():
     return render_template('index.html')
@@ -25,6 +34,7 @@ def home():
 def process():
     input_text = request.form['inputText']
     option = request.form['option']
+    keyword = request.form.get('keyword')
 
     if not input_text.strip():  # Check if input text is empty or contains only whitespace
         return render_template('index.html', error_message='Input text cannot be empty.')
@@ -58,6 +68,9 @@ def process():
     # Word Frequency Analysis
     word_freq = Counter(filtered_tokens)
 
+    # Concordance
+    concordance_list = generate_concordance(filtered_tokens, keyword)
+
     if option == 'Tokenize':
         return render_template('index.html', tokenized_text=tokenized_text)
     elif option == 'PosTag':
@@ -68,28 +81,14 @@ def process():
         return render_template('index.html', sentiment_scores=sentiment_scores)
     elif option == 'WordFreq':
         return render_template('index.html', word_freq=word_freq.most_common())
+    elif option == 'Concordance':
+        return render_template('index.html', concordance_list=concordance_list, keyword=keyword)
     elif option == 'All':
-        return render_template('index.html', tokenized_text=tokenized_text, pos_tagged_text=pos_tagged_text, ner_result=ner_result, sentiment_scores=sentiment_scores, word_freq=word_freq.most_common())
+        return render_template('index.html', tokenized_text=tokenized_text, pos_tagged_text=pos_tagged_text,
+                               ner_result=ner_result, sentiment_scores=sentiment_scores,
+                               word_freq=word_freq.most_common(), concordance_list=concordance_list, keyword=keyword)
     else:
         return render_template('index.html')  # Default render without results
-
-@app.route('/concordance', methods=['POST'])
-def concordance():
-    input_text = request.form['inputText']
-    word = request.form['word']
-
-    # Tokenization and stopwords removal
-    tokens = word_tokenize(input_text)
-    stop_words = set(stopwords.words('english'))
-    filtered_tokens = [word for word in tokens if word.lower() not in stop_words]
-
-    # Create an NLTK Text object
-    text = Text(filtered_tokens)
-
-    # Get concordance
-    conc = text.concordance(word)
-
-    return render_template('index.html', input_text=input_text, word=word, concordance=conc)
 
 if __name__ == '__main__':
     app.run(debug=True)

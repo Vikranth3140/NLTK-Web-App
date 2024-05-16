@@ -28,6 +28,11 @@
                     <option value="All">All</option>
                 </select>
             </div>
+            <!-- Additional input for Concordance -->
+            <div class="form-group" id="keywordInput" style="display:none;">
+                <label for="keyword">Keyword for Concordance:</label>
+                <input type="text" class="form-control" id="keyword" name="keyword">
+            </div>
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
         
@@ -69,7 +74,7 @@
                 <p>Compound: {{ sentiment_scores.compound }}</p>
             {% endif %}
         </div>
-        
+
         <!-- Word Frequency Analysis Result Display -->
         <div id="wordFreqResult" class="mt-4">
             {% if word_freq %}
@@ -84,9 +89,13 @@
 
         <!-- Concordance Result Display -->
         <div id="concordanceResult" class="mt-4">
-            {% if concordance %}
-                <h3>Concordance for '{{ word }}':</h3>
-                <p>{{ concordance }}</p>
+            {% if concordance_list %}
+                <h3>Concordance for '{{ keyword }}':</h3>
+                <ul>
+                    {% for context in concordance_list %}
+                        <li>{{ context }}</li>
+                    {% endfor %}
+                </ul>
             {% endif %}
         </div>
 
@@ -103,5 +112,16 @@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script>
+        // Show/hide keyword input for Concordance based on option selection
+        $('#optionSelect').change(function() {
+            var option = $(this).val();
+            if (option == 'Concordance') {
+                $('#keywordInput').show();
+            } else {
+                $('#keywordInput').hide();
+            }
+        });
+    </script>
 </body>
 </html>
