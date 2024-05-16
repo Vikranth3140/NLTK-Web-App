@@ -3,6 +3,7 @@ import nltk
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 from nltk import pos_tag, ne_chunk
+from nltk.chunk import RegexpParser
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 from nltk.corpus import wordnet as wn
 from collections import defaultdict, Counter
@@ -42,6 +43,15 @@ def get_wordnet_info(word):
         }
     else:
         return None
+
+def generate_chunks(tagged_tokens):
+    grammar = r"""
+        NP: {<DT>?<JJ>*<NN>}  # Chunk sequences of DT, JJ, NN
+            {<NNP>+}          # Chunk consecutive proper nouns
+    """
+    chunk_parser = RegexpParser(grammar)
+    tree = chunk_parser.parse(tagged_tokens)
+    return tree
 
 @app.route('/')
 def home():
@@ -91,6 +101,9 @@ def process():
     # WordNet Integration
     wordnet_info = get_wordnet_info(keyword)
 
+    # Chunking
+    chunked_tree = generate_chunks(tagged_tokens)
+
     if option == 'Tokenize':
         return render_template('index.html', tokenized_text=tokenized_text)
     elif option == 'PosTag':
@@ -105,11 +118,13 @@ def process():
         return render_template('index.html', concordance_list=concordance_list, keyword=keyword)
     elif option == 'WordNet':
         return render_template('index.html', wordnet_info=wordnet_info, keyword=keyword)
+    elif option == 'Chunking':
+        return render_template('index.html', chunked_tree=chunked_tree)
     elif option == 'All':
         return render_template('index.html', tokenized_text=tokenized_text, pos_tagged_text=pos_tagged_text,
                                ner_result=ner_result, sentiment_scores=sentiment_scores,
                                word_freq=word_freq.most_common(), concordance_list=concordance_list,
-                               wordnet_info=wordnet_info, keyword=keyword)
+                               wordnet_info=wordnet_info, chunked_tree=chunked_tree, keyword=keyword)
     else:
         return render_template('index.html')  # Default render without results
 

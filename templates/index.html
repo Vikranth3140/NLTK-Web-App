@@ -26,10 +26,11 @@
                     <option value="WordFreq">Word Frequency Analysis</option>
                     <option value="Concordance">Concordance</option>
                     <option value="WordNet">WordNet Integration</option>
+                    <option value="Chunking">Chunking</option>
                     <option value="All">All</option>
                 </select>
             </div>
-            <!-- Additional input for Concordance and WordNet -->
+            <!-- Additional input for Concordance, WordNet, and Chunking -->
             <div class="form-group" id="keywordInput" style="display:none;">
                 <label for="keyword">Keyword:</label>
                 <input type="text" class="form-control" id="keyword" name="keyword">
@@ -113,6 +114,14 @@
             {% endif %}
         </div>
 
+        <!-- Chunking Result Display -->
+        <div id="chunkedResult" class="mt-4">
+            {% if chunked_tree %}
+                <h3>Chunked Phrases:</h3>
+                {{ chunked_tree }}
+            {% endif %}
+        </div>
+
         <!-- Error Message Display -->
         <div id="errorMessage" class="mt-4">
             {% if error_message %}
@@ -127,10 +136,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <script>
-        // Show/hide keyword input for Concordance and WordNet based on option selection
+        // Show/hide keyword input for Concordance, WordNet, and Chunking based on option selection
         $('#optionSelect').change(function() {
             var option = $(this).val();
-            if (option == 'Concordance' || option == 'WordNet') {
+            if (option == 'Concordance' || option == 'WordNet' || option == 'Chunking') {
                 $('#keywordInput').show();
             } else {
                 $('#keywordInput').hide();
