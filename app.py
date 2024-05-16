@@ -23,8 +23,14 @@ def process():
     input_text = request.form['inputText']
     option = request.form['option']
 
+    if not input_text.strip():  # Check if input text is empty or contains only whitespace
+        return render_template('index.html', error_message='Input text cannot be empty.')
+
     # Tokenization and stopwords removal
     tokens = word_tokenize(input_text)
+    if not tokens:  # Check if tokenization produced any tokens
+        return render_template('index.html', error_message='Error in tokenization.')
+
     stop_words = set(stopwords.words('english'))
     filtered_tokens = [word for word in tokens if word.lower() not in stop_words]
     tokenized_text = ' '.join(filtered_tokens)
@@ -35,7 +41,7 @@ def process():
 
     # Named Entity Recognition (NER)
     ner_result = defaultdict(list)
-    ne_tree = ne_chunk(pos_tagged_text.split())
+    ne_tree = ne_chunk(tagged_tokens)
     for subtree in ne_tree:
         if isinstance(subtree, nltk.tree.Tree):
             entity = ' '.join([token for token, tag in subtree.leaves()])
