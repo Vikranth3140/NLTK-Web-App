@@ -1,13 +1,17 @@
 from flask import Flask, render_template, request
+import nltk
+from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
 
 app = Flask(__name__)
 
-# Import NLTK and download necessary resources
-import nltk
+# Download NLTK resources
 nltk.download('punkt')
 nltk.download('stopwords')
-from nltk.tokenize import word_tokenize
-from nltk.corpus import stopwords
+
+@app.route('/')
+def home():
+    return render_template('index.html')
 
 @app.route('/tokenize', methods=['POST'])
 def tokenize():

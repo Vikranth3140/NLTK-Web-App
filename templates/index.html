@@ -9,6 +9,8 @@
 <body>
     <div class="container">
         <h1 class="mt-4">NLTK Web App</h1>
+        
+        <!-- Tokenization Form -->
         <form method="post" action="/tokenize">
             <div class="form-group">
                 <label for="textInput">Enter Text:</label>
@@ -16,16 +18,16 @@
             </div>
             <button type="submit" class="btn btn-primary">Tokenize</button>
         </form>
-        <div id="tokenizedText" class="mt-4"></div>
         
+        <!-- Tokenized Text Display -->
         <div id="tokenizedText" class="mt-4">
             {% if tokenized_text %}
                 <h3>Tokenized Text (Without Stopwords):</h3>
                 <p>{{ tokenized_text }}</p>
             {% endif %}
         </div>
-        
     </div>
+
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
