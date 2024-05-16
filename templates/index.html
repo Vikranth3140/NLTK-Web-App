@@ -31,7 +31,7 @@
             </div>
             <!-- Additional input for Concordance and WordNet -->
             <div class="form-group" id="keywordInput" style="display:none;">
-                <label for="keyword">Keyword for Concordance / WordNet:</label>
+                <label for="keyword">Keyword:</label>
                 <input type="text" class="form-control" id="keyword" name="keyword">
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
@@ -104,18 +104,12 @@
         <div id="wordnetResult" class="mt-4">
             {% if wordnet_info %}
                 <h3>WordNet Information for '{{ keyword }}':</h3>
-                {% for synset in wordnet_info %}
-                    <div class="card mt-2">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ synset.name }}</h5>
-                            <p class="card-text"><strong>Definition:</strong> {{ synset.definition }}</p>
-                            {% if synset.examples %}
-                                <p class="card-text"><strong>Examples:</strong> {{ synset.examples }}</p>
-                            {% endif %}
-                            <!-- Include other information like hypernyms, hyponyms, etc. as needed -->
-                        </div>
-                    </div>
-                {% endfor %}
+                <p><strong>Definition:</strong> {{ wordnet_info['Definition'] }}</p>
+                <p><strong>Examples:</strong> {{ wordnet_info['Examples'] }}</p>
+                <p><strong>Hypernyms:</strong> {{ wordnet_info['Hypernyms'] }}</p>
+                <p><strong>Hyponyms:</strong> {{ wordnet_info['Hyponyms'] }}</p>
+                <p><strong>Holonyms:</strong> {{ wordnet_info['Holonyms'] }}</p>
+                <p><strong>Meronyms:</strong> {{ wordnet_info['Meronyms'] }}</p>
             {% endif %}
         </div>
 

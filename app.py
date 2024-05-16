@@ -4,8 +4,8 @@ from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 from nltk import pos_tag, ne_chunk
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
-from collections import defaultdict, Counter
 from nltk.corpus import wordnet as wn
+from collections import defaultdict, Counter
 
 app = Flask(__name__)
 
@@ -28,20 +28,20 @@ def generate_concordance(tokens, keyword, window_size=3):
             concordance_list.append(context)
     return concordance_list
 
-def get_wordnet_info(keyword):
-    synsets = wn.synsets(keyword)
-    synset_info = []
-    for synset in synsets:
-        synset_info.append({
-            'name': synset.name(),
-            'definition': synset.definition(),
-            'examples': synset.examples(),
-            'hypernyms': synset.hypernyms(),
-            'hyponyms': synset.hyponyms(),
-            'holonyms': synset.member_holonyms(),
-            'meronyms': synset.part_meronyms(),
-        })
-    return synset_info
+def get_wordnet_info(word):
+    synsets = wn.synsets(word)
+    if synsets:
+        synset = synsets[0]  # Taking the first synset for simplicity
+        return {
+            'Definition': synset.definition(),
+            'Examples': synset.examples(),
+            'Hypernyms': synset.hypernyms(),
+            'Hyponyms': synset.hyponyms(),
+            'Holonyms': synset.member_holonyms(),
+            'Meronyms': synset.part_meronyms()
+        }
+    else:
+        return None
 
 @app.route('/')
 def home():
@@ -109,7 +109,7 @@ def process():
         return render_template('index.html', tokenized_text=tokenized_text, pos_tagged_text=pos_tagged_text,
                                ner_result=ner_result, sentiment_scores=sentiment_scores,
                                word_freq=word_freq.most_common(), concordance_list=concordance_list,
-                               keyword=keyword, wordnet_info=wordnet_info)
+                               wordnet_info=wordnet_info, keyword=keyword)
     else:
         return render_template('index.html')  # Default render without results
 
